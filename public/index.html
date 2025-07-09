@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Personal Progress Flow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f4f8;
+      color: #334155;
+      margin: 0;
+    }
+    .logo-svg-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      stroke: black;
+      stroke-width: 1px;
+    }
+    .highlight-p { fill: #28a745; }
+    .highlight-r { fill: #dc3545; }
+    .highlight-f { fill: #007bff; }
+    .highlight-s { fill: #FFD700; }
+    .active-link {
+      background-color: rgba(255, 255, 255, 0.2);
+      font-weight: bold;
+    }
+            body {
+            font-family: 'Inter', sans-serif; /* Default body font */
+            background-color: #f0f4f8; /* Light background */
+            color: #334155; /* Dark gray text */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth theme transition */
+        }
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a202c; /* Dark background */
+            color: #e2e8f0; /* Light text */
+        }
+        body.dark-mode .bg-white {
+            background-color: #2d3748; /* Darker card background */
+            color: #e2e8f0;
+        }
+        body.dark-mode .text-blue-700 {
+            color: #90cdf4; /* Lighter blue for headings */
+        }
+        body.dark-mode .text-gray-700 {
+            color: #cbd5e0; /* Lighter gray for text */
+        }
+        body.dark-mode .border-gray-300 {
+            border-color: #4a5568;
+        }
+        body.dark-mode .shadow-lg {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+        body.dark-mode .bg-green-500 { background-color: #48bb78; }
+        body.dark-mode .hover:bg-green-600:hover { background-color: #38a169; }
+        body.dark-mode .bg-purple-500 { background-color: #9f7aea; }
+        body.dark-mode .hover:bg-purple-600:hover { background-color: #805ad5; }
+
+        /* Custom styles for splash screen and transitions */
+        /* Note: Splash screen is not included in this file, but styles are kept for consistency */
+        #splash-screen {
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+        }
+        .hidden-section {
+            display: none;
+        }
+        .nav-link-hover:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle hover for nav links */
+        }
+        /* Ensure content pushes footer down */
+       
+        main {
+            flex-grow: 1;
+        }
+
+        /* Hide scrollbar for the navigation links container */
+        .hide-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        /* Styles for the SVG logo text */
+        .logo-svg-text {
+            font-family: 'Poppins', sans-serif; /* Explicitly set Poppins for SVG text */
+            font-weight: 700; /* Bolder weight for Poppins */
+            letter-spacing: 1px; /* Slightly increased letter spacing */
+            stroke: black; /* Black border for all text */
+            stroke-width: 1px; /* Border thickness */
+        }
+        /* Colors for highlighted letters in the logo */
+        .highlight-p {
+            fill: #28a745; /* Green */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .highlight-r {
+            fill: #dc3545; /* Red */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .highlight-f {
+            fill: #007bff; /* Blue */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .highlight-s {
+            fill: #FFD700; /* Yellow (Gold) */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Q&A specific styles */
+        .qa-question {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #1a202c; /* Default text color for question */
+            border-bottom: 1px solid #e2e8f0; /* border-gray-200 */
+        }
+        body.dark-mode .qa-question {
+            color: #e2e8f0; /* Light text for dark mode */
+            border-bottom-color: #4a5568; /* Darker border for dark mode */
+        }
+        .qa-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding-top: 0;
+            padding-bottom: 0;
+            font-size: 1.125rem; /* text-lg */
+            color: #4a5568; /* Default text color for answer */
+        }
+        body.dark-mode .qa-answer {
+            color: #cbd5e0; /* Lighter gray for dark mode */
+        }
+        .qa-answer.open {
+            max-height: 500px; /* Adjust as needed for content length */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .qa-arrow {
+            transition: transform 0.3s ease;
+        }
+        .qa-arrow.rotate {
+            transform: rotate(180deg);
+        }
+
+  </style>
+</head>
+<body class="flex flex-col min-h-screen bg-white text-gray-800">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-gradient-to-r from-blue-600 to-purple-700 p-4 shadow-lg sticky top-0 z-40">
+    <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+      <!-- SVG Logo -->
+      <a href="index.html" class="flex justify-center items-center text-white text-2xl font-bold mb-4 md:mb-0">
+        <svg viewBox="0 0 400 150" class="h-16">
+          <rect x="0" y="0" width="400" height="150" fill="transparent"/>
+          <text x="50%" y="40" text-anchor="middle" font-size="40" class="logo-svg-text">
+            <tspan class="highlight-p">P</tspan><tspan fill="white">ersonal</tspan>
+          </text>
+          <text x="50%" y="80" text-anchor="middle" font-size="40" class="logo-svg-text">
+            <tspan fill="white">p</tspan><tspan class="highlight-r">R</tspan><tspan fill="white">ogre</tspan><tspan class="highlight-s">S</tspan><tspan fill="white">s</tspan>
+          </text>
+          <text x="50%" y="120" text-anchor="middle" font-size="40" class="logo-svg-text">
+            <tspan class="highlight-f">F</tspan><tspan fill="white">low</tspan>
+          </text>
+        </svg>
+      </a>
+
+      <!-- Navigation Links -->
+      <div class="flex flex-wrap justify-center md:justify-end space-x-2 text-sm md:space-x-4 md:text-lg">
+        <a href="index.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition active-link">Home</a>
+        <a href="uses.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Uses</a>
+        <a href="aboutus.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">About Us</a>
+        <a href="privacy.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Privacy</a>
+        <a href="contactus.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Contact Us</a>
+        <!-- Theme Toggle Button (icon) -->
+                    <button id="theme-toggle" class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md transition duration-300 flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 5.924l-.707.707M6.364 6.364l-.707-.707m12.728 0l-.707-.707M6.364 17.636l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+   <div class="centered-content">
+  <main class="flex-grow container mx-auto p-6">
+    <div class="bg-white p-8 rounded-xl shadow-lg text-center">
+      <h2 class="text-3xl font-bold text-blue-700 mb-4">Check Your Mood</h2>
+      <p class="text-lg text-gray-700 mb-6">Upload a photo to detect your mood using AI</p>
+
+      <input type="file" id="image-upload" accept="image/*" class="mb-4" />
+      <p id="upload-status" class="text-sm text-gray-600 mb-4"></p>
+
+      <button id="analyze-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full transition">
+        Analyze Mood
+      </button>
+
+      <div id="image-preview-container" class="mt-6 hidden">
+        <img id="image-preview" class="max-w-md mx-auto rounded-lg border-2 border-gray-300 shadow" />
+      </div>
+
+      <p id="result" class="text-xl font-semibold mt-6 text-purple-700"></p>
+      <br>
+      <p id="suggestion" class="text-lg mt-4 text-gray-700 font-medium"></p>
+      <div id="player" class="mt-4"></div>
+
+    </div>
+  </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center p-4">
+    <a href="index.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition active-link">Home</a>
+        <a href="uses.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Uses</a>
+        <a href="aboutus.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">About Us</a>
+        <a href="privacy.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Privacy</a>
+        <a href="contactus.html" class="text-white px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition">Contact Us</a><br><br>
+    <p>&copy; 2025 Personal Progress Flow. All rights reserved.</p>
+    
+  </footer>
+
+  <!-- JS Script -->
+<script>
+  const fileInput = document.getElementById("image-upload");
+  const preview = document.getElementById("image-preview");
+  const previewContainer = document.getElementById("image-preview-container");
+  const status = document.getElementById("upload-status");
+  const result = document.getElementById("result");
+              const themeToggleButton = document.getElementById('theme-toggle');
+            const themeIcon = themeToggleButton.querySelector('svg');
+
+            // Function to update the theme icon
+            function updateThemeIcon(isDarkMode) {
+                if (isDarkMode) {
+                    // Moon icon for dark mode
+                    themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`;
+                } else {
+                    // Sun icon for light mode
+                    themeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 5.924l-.707.707M6.364 6.364l-.707-.707m12.728 0l-.707-.707M6.364 17.636l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />`;
+                }
+            }
+
+            // --- Theme Toggle Logic ---
+            themeToggleButton.addEventListener('click', () => {
+                const isDarkMode = document.body.classList.toggle('dark-mode'); // Toggles dark-mode class
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                updateThemeIcon(isDarkMode); // Update icon based on new theme
+            });
+
+            // Apply saved theme on load and update icon
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                updateThemeIcon(true);
+            } else {
+                updateThemeIcon(false); // Ensure sun icon is set for light mode by default
+            }
+
+  const suggestions = {
+    happy: [
+      "😊 You're doing great! Spread that smile today.",
+      "Have a fun day! Here's some music to match your vibe.",
+      "Enjoy the little things — they're big in disguise.",
+      "Let that smile shine bright!",
+      "You're a burst of energy. Celebrate that!"
+    ],
+    sad: [
+      "💙 It's okay to feel down. You're not alone.",
+      "Try a cozy corner, music, and deep breaths.",
+      "You're stronger than you feel right now.",
+      "Let emotions flow, then let them go.",
+      "Be kind to yourself — this will pass too."
+    ],
+    angry: [
+      "😤 Take a deep breath — you're in control.",
+      "Channel your energy into something productive.",
+      "Step outside for a break or walk it off.",
+      "Let music mellow the mood.",
+      "You've got this — just cool down gently."
+    ],
+    fearful: [
+      "😨 You're safe. Try grounding yourself.",
+      "This fear will pass — you’ve made it this far.",
+      "Play calming music and relax your body.",
+      "Everything is okay — breathe slowly.",
+      "Give yourself space and stillness."
+    ],
+    disgust: [
+      "😖 Shake it off with something fun or silly.",
+      "A short walk or favorite snack can reset your day.",
+      "Try writing it out — vent and let go.",
+      "Call a friend and laugh it off.",
+      "This too shall pass!"
+    ],
+    neutral: [
+      "😐 It’s a calm day. Maybe explore something new?",
+      "Try learning a quick new skill or watch a short video.",
+      "Even a normal day can become great!",
+      "Enjoy the peace in neutrality.",
+      "Balance is beautiful."
+    ],
+    surprise: [
+      "😲 Lean into the unexpected!",
+      "Let today’s surprise be a story for tomorrow.",
+      "Go with the flow — you’re flexible.",
+      "Not all surprises are bad — smile!",
+      "Take it in — reflect later."
+    ]
+  };
+
+  const moodSongs = {
+    happy: ["x4qTbH8z-GI?si=mf5fQ1MUhToxseW0", "MvW8E1nwrE4?si=HQTSBzxHy_2WBqV9", "NyBrTymEajA?si=mO8Xg4H0GWya4W2E", "b-uQtN5lbGA?si=qcuPMIpxNSu7u6NB", "toTRkovRzvo?si=MsUwA9HJ_qLJTDLq"],
+    sad: ["gPs2PopJFlc?si=WeOOEsFYVMnzaeMh", "vSIE_Pi1ejs?si=I1BEJvHv5pONzLkZ", "mJPEf7vWb6Q?si=GoEwEpUL_L0epNTy", "RcMQuy1ObeY?si=134_taHGr1b6VvTr", "GhXU_FTKNbE?si=8EoKi-Mqn9lGSxPo"],
+    angry: ["Bg8Yb9zGYyA?si=dI_bYpd_4V1xJic2","wZbI5RqMMDg?si=b8PM1J-WgfrCz8Hx","XD1cW3z5epg?si=C7cOpammSNYyQ7yS","zZl7vDDN8Ek?si=4H2kCWT7tGSzsIpj","TBX-PJyifts?si=2Blyoonq4EM_n1zV"],
+    fearful: ["PKzA-BRCTQ0?si=OHaw12xWdWdileFB", "_PtH3QraTz0?si=ErDNwj_0y0sf9wCw", "yEBee5d_S8U?si=gXzRc45OGuoyxeUa", "4zQN-Hw0JuQ?si=MOGZl2Ud5IVX1hUK", "i_cKDAFG0Mo?si=ZL8LZyEmqEYt1qzN"],
+    disgust: ["iDnGD_diZVM?si=bXMPldKoVtlQnfyt", "2a34XyiZO14?si=PdUfJWnINUkGvf5J", "ipiF7b0Rg2o?si=1NYqLGX790yTSm8g", "47RtCabjFK0?si=Y3oX_ejuV1VfVzjf", "47RtCabjFK0?si=Y3oX_ejuV1VfVzjf"],
+    neutral: ["_xuI60USDjw?si=2f980RIpGYkajomr", "OUpz-uETnvQ?si=RlvY55n6BTN6wzwH", "8LXvQBACCCE?si=EQ3y8qTKLBLtLZUH", "G7Fxzz-NH_s?si=bymKqEerhC0VrSQe", "4dbiE-da82E?si=Bng5UqoyB3qz_xOr"],
+    surprise: ["Th4uWCY-tQU?si=Ui8eLrAn7Ovgsh6R", "MuJXBJBTVkI?si=Qb2r4ousmIMgyRrC", "g0RPoEt9xdU?si=jr2E634NbXII6ci0", "Er8D49RPLCs?si=42ouM1_L9eTw4suU", "f-KyCvE8AS0?si=ca8-t23tnNY-PIjC"]
+  };
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      previewContainer.classList.remove("hidden");
+      status.textContent = `Selected: ${file.name}`;
+    } else {
+      previewContainer.classList.add("hidden");
+      preview.src = "";
+      status.textContent = "No file selected.";
+    }
+  });
+
+  document.getElementById("analyze-button").addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    const file = fileInput.files[0];
+    if (!file) {
+      status.textContent = "Please select an image first.";
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    result.textContent = "Analyzing mood...";
+    document.getElementById("suggestion").textContent = "";
+    document.getElementById("player").innerHTML = "";
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.mood) {
+        const mood = data.mood.toLowerCase();
+        result.textContent = `Detected Mood: ${data.mood}`;
+
+        const suggestionList = suggestions[mood] || ["Take care of yourself 💛"];
+        const songList = moodSongs[mood] || [];
+
+        const randomSuggestion = suggestionList[Math.floor(Math.random() * suggestionList.length)];
+        const randomSongId = songList[Math.floor(Math.random() * songList.length)];
+
+        document.getElementById("suggestion").textContent = randomSuggestion;
+
+        if (randomSongId) {
+          const embedHTML = `
+            <iframe width="320" height="180" src="https://www.youtube.com/embed/${randomSongId}" 
+              frameborder="0" allowfullscreen class="mx-auto rounded-lg shadow mt-4"></iframe>`;
+          document.getElementById("player").innerHTML = embedHTML;
+        }
+      } else {
+        result.textContent = "Mood detection failed. Human Not Recognised";
+      }
+    } catch (err) {
+      console.error(err);
+      result.textContent = "Error connecting to server.";
+    }
+  });
+</script>
+  
+</body>
+</html>
