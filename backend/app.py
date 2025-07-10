@@ -8,10 +8,9 @@ app = Flask(__name__)
 CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image uploaded'}), 400
+@app.route('/')
+def home():
+    return 'Welcome to Personal Progress Flow API'
 
     image = request.files['image']
     image_path = "temp.jpg"
