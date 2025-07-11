@@ -1,37 +1,35 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from deepface import DeepFace
+from fer import FER
+import cv2
+import numpy as np
 import os
-import logging
 
 app = Flask(__name__)
 CORS(app)
-logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def home():
     return 'Welcome to Personal Progress Flow API'
 
-
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'image' not in request.files:
-        return jsonify({'error': 'No image provided'}), 400
+        return jsonify({'error': 'No image uploaded'}), 400
 
-    image = request.files['image']
-    image_path = "temp.jpg"
-    image.save(image_path)
+    image_file = request.files['image']
+    image_bytes = np.asarray(bytearray(image_file.read()), dtype=np.uint8)
+    image = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
 
-    try:
-        analysis = DeepFace.analyze(img_path=image_path, actions=['emotion'])
-        os.remove(image_path)
-        mood = analysis[0]['dominant_emotion']
-        return jsonify({'mood': mood})
-    except Exception as e:
-        logging.error(f"DeepFace analysis failed: {e}")
-        return jsonify({'error': str(e)}), 500
+    detector = FER(mtcnn=False)
+    emotions = detector.detect_emotions(image)
+
+    if not emotions:
+        return jsonify({'mood': None, 'error': 'No face detected'}), 200
+
+    mood = max(emotions[0]["emotions"], key=emotions[0]["emotions"].get)
+    return jsonify({'mood': mood})
 
 if __name__ == '__main__':
-    # Use 5000 locally, Render will override with its own PORT
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
