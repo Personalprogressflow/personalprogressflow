@@ -12,6 +12,12 @@ logging.basicConfig(level=logging.DEBUG)
 def home():
     return 'Welcome to Personal Progress Flow API'
 
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image provided'}), 400
+
     image = request.files['image']
     image_path = "temp.jpg"
     image.save(image_path)
