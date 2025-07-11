@@ -1,6 +1,6 @@
 Flask==2.3.3
 Flask-Cors==4.0.0
-deepface==0.0.79
-tensorflow==2.10.0
-numpy==1.24.4
 gunicorn
+opencv-python
+fer
+numpy==1.24.4
